@@ -1,0 +1,16 @@
+*.hi
+*.hie
+*.hie-boot
+*.o
+*.tmp
+*.tmp.*
+*~
+.cabal-sandbox/
+.DS_Store
+.ghc.environment.*
+.ghci.local
+.\#*
+cabal.sandbox.config
+dist-*/
+dist/
+\#*\#

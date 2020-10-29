@@ -1,0 +1,21 @@
+<?xml version='1.0' ?>
+<testsuites>
+  <testsuite>
+    <testcase>
+      <failure>Property prop_qsort_length:
+*** Failed! Falsified (after 6 tests and 3 shrinks):
+[-2,-2]
+
+
+</failure>
+      <failure>
+Property prop_qsort_sorted:
+*** Failed! Falsified (after 4 tests and 2 shrinks):
+[0,-1]
+
+
+
+</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
