@@ -1,4 +1,4 @@
-IMAGE_NAME := weblab/haskell
+IMAGE_NAME := weblab/cse3100-2020-haskell
 DOCKERFILE_PATH := Dockerfile
 
 MAKEFILE := $(abspath $(lastword $(MAKEFILE_LIST)))
