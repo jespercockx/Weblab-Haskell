@@ -6,12 +6,6 @@ RUN apt-get update && apt-get install -y \
       bash \
       libtinfo5 \
     --no-install-recommends \
- && add-apt-repository ppa:hvr/ghc \
- && apt-get update && apt-get install -y \
-      ghc-8.10.2 \
-      cabal-install-3.4 \
-    --no-install-recommends \
- && find /opt/ghc -type f -name '*.a' -exec rm {} + \
  && rm -r /var/lib/apt/lists/*
 
 # Switch to bash
@@ -36,12 +30,21 @@ RUN set -o errexit -o nounset \
 WORKDIR ${UHOME}
 ENV HOME ${UHOME}
 COPY --chown=${UNAME} testrunner/ ${UHOME}
-RUN cabal new-update \
+RUN add-apt-repository ppa:hvr/ghc \
+ && apt-get update && apt-get install -y \
+      ghc-8.10.2 \
+      cabal-install-3.4 \
+    --no-install-recommends \
+ && rm -r /var/lib/apt/lists/* \
+ && cabal new-update \
  && cabal v2-install --enable-executable-dynamic --lib QuickCheck xml \
  && cabal v2-install --enable-executable-dynamic \
  && rm ~/.cabal/packages/hackage.haskell.org/*-index.* \
+ && rm -r /opt/ghc/*/lib/ghc-*/Cabal-* \
  && find ~/.cabal -type f -name '*.a' -exec rm {} + \
  && find /opt/ghc -type f -name '*.a' -exec rm {} + \
+ && find /opt/ghc -type f -name '*.hi' -exec rm {} + \
+ && find /opt/ghc -name '*-prof' -exec rm -r {} + \
  && chown -R ${UNAME}:${GNAME} ${UHOME}/.cabal/
 
 # Copy user code
