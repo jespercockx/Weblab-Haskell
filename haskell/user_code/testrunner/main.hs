@@ -17,13 +17,13 @@ import qualified Text.XML.Light as XML
 output_file = "output/results.xml"
 
 -- Run the tests on the solution in the current directory.
--- Precondition: files `library.txt`, `solution.txt`, and `test.txt` are present.
+-- Precondition: files `library.hs`, `solution.hs`, and `test.hs` are present.
 -- Return @Nothing@ if successful or @Just err@ in case of error.
 main :: IO ()
 main = do
-  lib <- readFile "library.txt"
-  sol <- readFile "solution.txt"
-  tst <- readFile "test.txt"
+  lib <- readFile "library.hs"
+  sol <- readFile "solution.hs"
+  tst <- readFile "test.hs"
 
   let props = zip (getPropertyNames tst) [0..]
   let allRs = "[" ++ intercalate "," (map (\(p,i) -> "(\"" ++ p ++ "\",r" ++ show i ++ ")") props) ++ "]"
