@@ -1,16 +1,23 @@
-FROM haskell:8.10
-
-WORKDIR /home/
+FROM ubuntu:focal
 
 # Install packages
 RUN apt-get update && apt-get install -y \
+      software-properties-common \
       bash \
       libtinfo5 \
+    --no-install-recommends \
+ && add-apt-repository ppa:hvr/ghc \
+ && apt-get update && apt-get install -y \
+      ghc-8.10.2 \
+      cabal-install-3.4 \
     --no-install-recommends \
  && rm -r /var/lib/apt/lists/*
 
 # Switch to bash
 SHELL ["/bin/bash", "-c"]
+
+# Add GHC to the path
+ENV PATH="/opt/ghc/bin:${PATH}"
 
 # Create student user
 ARG GNAME=student
