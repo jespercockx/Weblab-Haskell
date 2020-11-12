@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y \
       ghc-8.10.2 \
       cabal-install-3.4 \
     --no-install-recommends \
+ && find /opt/ghc -type f -name '*.a' -exec rm {} + \
  && rm -r /var/lib/apt/lists/*
 
 # Switch to bash

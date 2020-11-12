@@ -19,3 +19,4 @@ executable TestRunner
   default-language:   Haskell2010
   default-extensions: MultiWayIf
                     , TupleSections
+  ghc-options: -dynamic
