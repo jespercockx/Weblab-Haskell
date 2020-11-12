@@ -43,7 +43,7 @@ main = do
     ] ++
     [ "  writeResults " ++ show outputFile ++ " " ++ allRs ]
 
-  (exit, out, err) <- readProcessWithExitCode "runghc" ["runtests.hs"] ""
+  (exit, out, err) <- readProcessWithExitCode "runghc" ["-dynamic", "runtests.hs"] ""
 
   -- If runghc threw an error, write it to the output as a single failure.
   when (exit /= ExitSuccess) $
