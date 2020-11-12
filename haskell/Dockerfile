@@ -4,10 +4,7 @@ WORKDIR /home/
 
 # Install packages
 RUN apt-get update && apt-get install -y \
-      software-properties-common \
       bash \
-      make \
-      sudo \
       libtinfo5 \
     --no-install-recommends \
  && rm -r /var/lib/apt/lists/*
