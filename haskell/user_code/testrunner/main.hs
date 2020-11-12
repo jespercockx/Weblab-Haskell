@@ -14,7 +14,9 @@ import System.Process
 
 import qualified Text.XML.Light as XML
 
-output_file = "output/results.xml"
+import FormatResult
+
+outputFile = "output/results.xml"
 
 -- Run the tests on the solution in the current directory.
 -- Precondition: files `library.hs`, `solution.hs`, and `test.hs` are present.
@@ -29,10 +31,8 @@ main = do
   let allRs = "[" ++ intercalate "," (map (\(p,i) -> "(\"" ++ p ++ "\",r" ++ show i ++ ")") props) ++ "]"
 
   writeFile "runtests.hs" $ unlines $
-    [ "import Control.Monad"
-    , "import Data.List"
-    , "import System.Exit"
-    , "import Test.QuickCheck"
+    [ "import Test.QuickCheck"
+    , "import FormatResult"
     , lib
     , sol
     , tst
@@ -41,39 +41,24 @@ main = do
     [ "  r" ++ show i ++ " <- quickCheckResult " ++ p
     | (p,i) <- props
     ] ++
-    [ "  let errs = [ unlines [\"Property \" ++ p ++ \":\"  , output r]"
-    , "             | (p,r) <- " ++ allRs ++ ", not (isSuccess r) ]"
-    , "  unless (null errs) $ die $ unlines $ intersperse \"=~*^=~*^=~*^=~*^\" errs"
-    ]
+    [ "  writeResults " ++ show outputFile ++ " " ++ allRs ]
 
   (exit, out, err) <- readProcessWithExitCode "runghc" ["runtests.hs"] ""
 
-  let output
-        | exit == ExitSuccess = successOutput
-        | otherwise           = failureOutput $ prettyErrors err
-  writeFile output_file $ XML.ppTopElement output
+  -- If runghc threw an error, write it to the output as a single failure.
+  when (exit /= ExitSuccess) $
+    writeFile outputFile $ XML.ppTopElement $ failureOutput err
 
   where
-    prettyErrors x =
-      let errs = splitOn "=~*^=~*^=~*^=~*^" x
-      in errs
-
+    failureOutput :: String -> XML.Element
+    failureOutput err =
+      XML.unode "testsuites" $
+      XML.unode "testsuite" $
+      XML.unode "testcase" $
+      XML.unode "failure" err
 
 -- Get the names of all QuickCheck properties in the file with the
 -- given content (names starting with `prop_`).
 getPropertyNames :: String -> [String]
 getPropertyNames x =
   nub $ filter ("prop_" `isPrefixOf`) (map (fst . head . lex) (lines x))
-
-successOutput :: XML.Element
-successOutput =
-  XML.unode "testsuites" $
-  XML.unode "testsuite" $
-  XML.unode "testcase" ()
-
-failureOutput :: [String] -> XML.Element
-failureOutput errs =
-  XML.unode "testsuites" $
-  XML.unode "testsuite" $
-  XML.unode "testcase" $
-  map (XML.unode "failure") errs

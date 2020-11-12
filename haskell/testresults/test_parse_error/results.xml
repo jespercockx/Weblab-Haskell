@@ -3,11 +3,11 @@
   <testsuite>
     <testcase>
       <failure>
-runtests.hs:6:1: error:
+runtests.hs:4:1: error:
     Parse error: module header, import declaration
     or top-level declaration expected.
   |
-6 | fdsgf
+4 | fdsgf
   | ^^^^^
 </failure>
     </testcase>

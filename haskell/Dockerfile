@@ -33,8 +33,8 @@ WORKDIR ${UHOME}
 # Update Cabal package database
 RUN cabal new-update
 
-# Install QuickCheck library
-RUN cabal v2-install --lib QuickCheck
+# Install QuickCheck and xml libraries
+RUN cabal v2-install --lib QuickCheck xml
 
 # Install test runner
 RUN cd testrunner && cabal v2-install
@@ -45,6 +45,7 @@ RUN chmod u-w truncate_output.sh
 # Run
 ENV HOME ${UHOME}
 RUN mkdir ${UHOME}/output
+COPY --chown=${UNAME} user_code/testrunner/FormatResult.hs ${UHOME}
 CMD ( ~/.cabal/bin/TestRunner | tee output/stdout.txt ) 3>&1 1>&2 2>&3 | tee output/stderr.txt \
  && ./truncate_output.sh
  
