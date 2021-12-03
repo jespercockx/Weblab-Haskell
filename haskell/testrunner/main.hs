@@ -1,16 +1,11 @@
 
 import Control.Monad
 
-import Data.List hiding ( find )
-import Data.List.Split
-import Data.Maybe
+import Data.List ( intercalate, nub, isPrefixOf )
 
-import System.Directory
-import System.Exit
-import System.FilePath
-import System.FilePath.Find
-import System.IO
-import System.Process
+import System.Exit ( ExitCode(..) )
+import System.IO ( readFile' )
+import System.Process ( readProcessWithExitCode )
 
 import qualified Text.XML.Light as XML
 
