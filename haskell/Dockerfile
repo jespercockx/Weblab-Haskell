@@ -32,7 +32,7 @@ ENV HOME ${UHOME}
 COPY --chown=${UNAME} testrunner/ ${UHOME}
 RUN add-apt-repository ppa:hvr/ghc \
  && apt-get update && apt-get install -y \
-      ghc-8.10.2 \
+      ghc-9.0.1 \
       cabal-install-3.4 \
     --no-install-recommends \
  && rm -r /var/lib/apt/lists/* \

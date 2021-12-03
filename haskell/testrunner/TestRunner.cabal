@@ -1,13 +1,13 @@
 cabal-version:       3.0
 name:                TestRunner
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Test runner for Haskell code on Weblab
 license:             MIT
 category:            executable
 
 executable TestRunner
   main-is:        main.hs
-  build-depends:  base        >= 4.14.0 && < 4.15,
+  build-depends:  base        >= 4.15.0 && < 4.16,
                   process     >= 1.6    && < 1.7,
                   QuickCheck  >= 2.14   && < 3.0,
                   xml         >= 1.3    && < 1.4
