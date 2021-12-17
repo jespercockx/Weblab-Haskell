@@ -18,11 +18,13 @@ outputFile = "output/results.xml"
 -- Return @Nothing@ if successful or @Just err@ in case of error.
 main :: IO ()
 main = do
+  lib <- readFile' "library.hs"
   sol <- readFile' "solution.hs"
   tst <- readFile' "test.hs"
 
-  writeFile "solution.hs" $ unlines [ "import library" ] ++ sol
-  writeFile "test.hs"     $ unlines [ "import library" , "import solution" ] ++ tst
+  writeFile "Library.hs"  $ unlines [ "module Library where" ] ++ lib
+  writeFile "Solution.hs" $ unlines [ "module Solution where" , "import Library" ] ++ sol
+  writeFile "Test.hs"     $ unlines [ "module Test where" , "import Library" , "import Solution" ] ++ tst
 
   let props = zip (getPropertyNames tst) [0..]
   let allRs = "[" ++ intercalate "," (map (\(p,i) -> "(\"" ++ p ++ "\",r" ++ show i ++ ")") props) ++ "]"
@@ -30,7 +32,7 @@ main = do
   writeFile "runtests.hs" $ unlines $
     [ "import Test.QuickCheck"
     , "import FormatResult"
-    , "import test"
+    , "import Test"
     , "main = do"
     ] ++
     [ "  r" ++ show i ++ " <- quickCheckResult " ++ p
