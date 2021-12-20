@@ -24,7 +24,7 @@ main = do
 
   writeFile "Library.hs"  $ unlines [ "module Library where" ] ++ lib
   writeFile "Solution.hs" $ unlines [ "module Solution where" , "import Library" ] ++ sol
-  writeFile "Test.hs"     $ unlines [ "module Test where" , "import Library" , "import Solution" ] ++ tst
+  writeFile "Test.hs"     $ unlines [ "module Test where" , "import Test.QuickCheck", "import Library" , "import Solution" ] ++ tst
 
   let props = zip (getPropertyNames tst) [0..]
   let allRs = "[" ++ intercalate "," (map (\(p,i) -> "(\"" ++ p ++ "\",r" ++ show i ++ ")") props) ++ "]"
