@@ -1,0 +1,15 @@
+<?xml version='1.0' ?>
+<testsuites>
+  <testsuite>
+    <testcase>
+      <failure>
+Solution.hs:3:1: error:
+    Parse error: module header, import declaration
+    or top-level declaration expected.
+  |
+3 | fdsgf
+  | ^^^^^
+</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

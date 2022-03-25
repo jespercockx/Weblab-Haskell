@@ -1,0 +1,11 @@
+<?xml version='1.0' ?>
+<testsuites>
+  <testsuite>
+    <testcase name="prop_expectFail" weight="1">
+      <failure>Property prop_expectFail failed!
+*** Failed! Passed 1 test (expected failure).
+
+</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -1,0 +1,7 @@
+<?xml version='1.0' ?>
+<testsuites>
+  <testsuite>
+    <testcase name="prop_qsort_length" weight="1" />
+    <testcase name="prop_qsort_sorted" weight="1" />
+  </testsuite>
+</testsuites>

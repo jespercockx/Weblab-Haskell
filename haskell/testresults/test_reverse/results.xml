@@ -1,0 +1,8 @@
+<?xml version='1.0' ?>
+<testsuites>
+  <testsuite>
+    <testcase name="prop_reverse_nil" weight="1" />
+    <testcase name="prop_reverse_cons" weight="1" />
+    <testcase name="prop_reverse_correct" weight="1" />
+  </testsuite>
+</testsuites>

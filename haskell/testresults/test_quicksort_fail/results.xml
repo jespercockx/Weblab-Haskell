@@ -1,0 +1,19 @@
+<?xml version='1.0' ?>
+<testsuites>
+  <testsuite>
+    <testcase name="prop_3_qsort_length" weight="3">
+      <failure>Property prop_3_qsort_length failed!
+*** Failed! Falsified (after 3 tests):
+[2,2]
+
+</failure>
+    </testcase>
+    <testcase name="prop_5_qsort_sorted" weight="5">
+      <failure>Property prop_5_qsort_sorted failed!
+*** Failed! Falsified (after 4 tests and 2 shrinks):
+[0,-1]
+
+</failure>
+    </testcase>
+  </testsuite>
+</testsuites>
