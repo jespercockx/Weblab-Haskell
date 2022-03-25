@@ -15,4 +15,5 @@ executable TestRunner
   default-language:   Haskell2010
   default-extensions: MultiWayIf
                     , TupleSections
+                    , ScopedTypeVariables
   ghc-options: -dynamic

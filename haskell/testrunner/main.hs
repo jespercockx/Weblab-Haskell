@@ -6,6 +6,7 @@ import Data.List ( intercalate, nub, isPrefixOf )
 import System.Exit ( ExitCode(..) )
 import System.IO ( readFile' )
 import System.Process ( readProcessWithExitCode )
+import Text.Read ( readMaybe )
 
 import qualified Text.XML.Light as XML
 
@@ -26,8 +27,8 @@ main = do
   writeFile "Solution.hs" $ unlines [ "module Solution where" , "import Library" ] ++ sol
   writeFile "Test.hs"     $ unlines [ "module Test where" , "import Test.QuickCheck", "import Library" , "import Solution" ] ++ tst
 
-  let props = zip (getPropertyNames tst) [0..]
-  let allRs = "[" ++ intercalate "," (map (\(p,i) -> "(\"" ++ p ++ "\",r" ++ show i ++ ")") props) ++ "]"
+  let props = zipWith (\(p,w) i -> (p,w,i)) (getPropertyNamesAndWeights tst)  [0..]
+  let allRs = "[" ++ intercalate "," (map (\(p,w,i) -> "(\"" ++ p ++ "\"," ++ show w ++ ",r" ++ show i ++ ")") props) ++ "]"
 
   writeFile "runtests.hs" $ unlines $
     [ "import Test.QuickCheck"
@@ -36,7 +37,7 @@ main = do
     , "main = do"
     ] ++
     [ "  r" ++ show i ++ " <- quickCheckResult " ++ p
-    | (p,i) <- props
+    | (p,w,i) <- props
     ] ++
     [ "  writeResults " ++ show outputFile ++ " " ++ allRs ]
 
@@ -54,8 +55,15 @@ main = do
       XML.unode "testcase" $
       XML.unode "failure" err
 
--- Get the names of all QuickCheck properties in the file with the
--- given content (names starting with `prop_`).
-getPropertyNames :: String -> [String]
-getPropertyNames x =
-  nub $ filter ("prop_" `isPrefixOf`) (map (fst . head . lex) (lines x))
+-- Get the names and weights of all QuickCheck properties in the file
+-- with the given content (names starting with `prop_` or with
+-- `prop_x_` for a test with weight x).
+getPropertyNamesAndWeights :: String -> [(String,Int)]
+getPropertyNamesAndWeights x =
+  let props   = nub $ filter ("prop_" `isPrefixOf`) (map (fst . head . lex) (lines x))
+      weights = map getWeight props
+  in zip props weights
+  where
+    getWeight p = case readMaybe (takeWhile (/= '_') (drop 5 p)) of
+      Just (n :: Int) -> n
+      Nothing         -> 1
