@@ -1,0 +1,1 @@
+add_and_double x y = 2 * (x+y)
