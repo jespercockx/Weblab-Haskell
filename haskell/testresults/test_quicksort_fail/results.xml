@@ -3,15 +3,15 @@
   <testsuite>
     <testcase name="prop_3_qsort_length" weight="3">
       <failure>Property prop_3_qsort_length failed!
-*** Failed! Falsified (after 3 tests):
-[2,2]
+*** Failed! Falsified (after 8 tests and 3 shrinks):
+[0,0]
 
 </failure>
     </testcase>
     <testcase name="prop_5_qsort_sorted" weight="5">
       <failure>Property prop_5_qsort_sorted failed!
-*** Failed! Falsified (after 4 tests and 2 shrinks):
-[0,-1]
+*** Failed! Falsified (after 6 tests and 5 shrinks):
+[1,0]
 
 </failure>
     </testcase>

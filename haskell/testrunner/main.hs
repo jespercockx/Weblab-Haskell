@@ -1,7 +1,9 @@
 
 import Control.Monad
 
+import Data.Hashable ( hash )
 import Data.List ( intercalate, nub, isPrefixOf )
+import Data.Maybe ( fromMaybe, listToMaybe )
 
 import System.Exit ( ExitCode(..) )
 import System.IO ( readFile' )
@@ -29,14 +31,18 @@ main = do
 
   let props = zipWith (\(p,w) i -> (p,w,i)) (getPropertyNamesAndWeights tst)  [0..]
   let allRs = "[" ++ intercalate "," (map (\(p,w,i) -> "(\"" ++ p ++ "\"," ++ show w ++ ",r" ++ show i ++ ")") props) ++ "]"
+  let qcArgs = case splitAt 8 (fromMaybe "" $ listToMaybe $ lines tst) of
+        ("-- seed:", x) -> \u -> "stdArgs { replay = Just (mkQCGen (" ++ show (hash (u,x)) ++ "), 0) }"
+        _               -> const "stdArgs"
 
   writeFile "runtests.hs" $ unlines $
     [ "import Test.QuickCheck"
+    , "import Test.QuickCheck.Random"
     , "import FormatResult"
     , "import Test"
     , "main = do"
     ] ++
-    [ "  r" ++ show i ++ " <- quickCheckResult " ++ p
+    [ "  r" ++ show i ++ " <- quickCheckWithResult " ++ qcArgs p ++ " " ++ p
     | (p,w,i) <- props
     ] ++
     [ "  writeResults " ++ show outputFile ++ " " ++ allRs ]

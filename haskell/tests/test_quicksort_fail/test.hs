@@ -1,3 +1,4 @@
+-- seed: 0
 
 sorted :: Ord a => [a] -> Bool
 sorted (x1:x2:xs) =
