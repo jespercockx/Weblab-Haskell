@@ -44,7 +44,7 @@ RUN ghcup install ghc 9.0.2 --set \
  && find ~/.ghcup/ghc -type f -name '*-prof' -exec rm {} + \
  && ghcup gc
 RUN ghcup install hls 1.8.0 \
- && rm -rf ~/.ghcup/hls/*/lib \
+# && rm -rf ~/.ghcup/hls/*/lib \
  && find ~/.ghcup/hls/*/bin -type f ! -name 'haskell-language-server-9.0.2' -exec rm {} + \
  && ghcup gc
 
