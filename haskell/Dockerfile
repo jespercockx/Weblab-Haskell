@@ -29,10 +29,9 @@ ENV HOME ${UHOME}
 USER ${UNAME}
 
 # Install GHC, Cabal and HLS via GHCUP
-# any nonzero value for noninteractive installation
 ENV BOOTSTRAP_HASKELL_NONINTERACTIVE=1
-# any nonzero value to only install ghcup itself
 ENV BOOTSTRAP_HASKELL_MINIMAL=1
+ENV BOOTSTRAP_HASKELL_NO_UPGRADE=1
 # download and installation of ghcup
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 # Add ghcup directory to the path
