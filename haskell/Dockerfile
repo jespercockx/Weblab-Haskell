@@ -36,30 +36,20 @@ ENV BOOTSTRAP_HASKELL_NO_UPGRADE=1
 RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 # Add ghcup directory to the path
 ENV PATH="${UHOME}/.ghcup/bin:${PATH}"
-# install ghc, cabal, and hls
-RUN ghcup install ghc 9.0.2 --set
-RUN ghcup install cabal 3.6.2.0
-
-# Install libraries and test runner
-COPY --chown=${UNAME} testrunner/ ${UHOME}
-RUN cabal update \
- && cabal v2-install --enable-executable-dynamic --lib QuickCheck xml \
- && cabal v2-install --enable-executable-dynamic \
- && rm ${UHOME}/.cabal/packages/hackage.haskell.org/*-index.* \
- && rm -r ${UHOME}/.ghcup/ghc/*/lib/ghc-*/Cabal-* \
- && find ${UHOME}/.cabal -type f -name '*.a' -exec rm {} + \
- && find ${UHOME}/.ghcup/ghc -type f -name '*.a' -exec rm {} + \
- && find ${UHOME}/.ghcup/ghc -type f -name '*.hi' -exec rm {} + \
- && find ${UHOME}/.ghcup/ghc -name '*-prof' -exec rm -r {} +
+# install ghc and hls
+RUN ghcup install ghc 9.0.2 --set \
+ && rm -rf ~/.ghcup/ghc/*/share/doc \
+ && find ~/.ghcup/ghc -type f -name '*.a' -exec rm {} + \
+ && find ~/.ghcup/ghc -type f -name '*.hi' -exec rm {} + \
+ && find ~/.ghcup/ghc -type f -name '*-prof' -exec rm {} + \
+ && ghcup gc
+RUN ghcup install hls 1.8.0 \
+ && rm -rf ~/.ghcup/hls/*/lib \
+ && find ~/.ghcup/hls/*/bin -type f ! -name 'haskell-language-server-9.0.2' -exec rm {} + \
+ && ghcup gc
 
 # Copy user code
 COPY --chown=${UNAME} user_code/ ${UHOME}
 
-# Remove write permission on truncate_output.sh
-RUN chmod u-w truncate_output.sh
-
 # Run
-RUN mkdir ${UHOME}/output
-CMD ( ~/.cabal/bin/TestRunner | tee output/stdout.txt ) 3>&1 1>&2 2>&3 | tee output/stderr.txt \
- && ./truncate_output.sh
- 
+CMD haskell-language-server-9.0.2 lsp
