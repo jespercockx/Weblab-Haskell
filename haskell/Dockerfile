@@ -19,9 +19,9 @@ ARG GID=1000
 ARG UNAME=student
 ARG UID=1000
 ARG UHOME=/user_code
-RUN set -o errexit -o nounset
-RUN addgroup --gid ${GID} "${GNAME}"
-RUN adduser --home "${UHOME}" --disabled-password --uid ${UID} --ingroup "${GNAME}" "${UNAME}" --gecos ""
+RUN set -o errexit -o nounset \
+ && addgroup --gid ${GID} "${GNAME}" \
+ && adduser --home "${UHOME}" --disabled-password --uid ${UID} --ingroup "${GNAME}" "${UNAME}" --gecos ""
 
 # Switch to student user
 WORKDIR ${UHOME}
@@ -50,6 +50,7 @@ RUN ghcup install hls 1.8.0 \
 
 # Copy user code
 COPY --chown=${UNAME} user_code/ ${UHOME}
+RUN mkdir -p ${UHOME}/output
 
 # Run
 CMD haskell-language-server-9.0.2 lsp
