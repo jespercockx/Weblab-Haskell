@@ -37,15 +37,17 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 # Add ghcup directory to the path
 ENV PATH="${UHOME}/.ghcup/bin:${PATH}"
 # install ghc and hls
-RUN ghcup install ghc 9.0.2 --set \
+ARG GHC_VERSION=9.8.1
+ARG HLS_VERSION=2.4.0.0
+RUN ghcup install ghc "${GHC_VERSION}" --set \
  && rm -rf ~/.ghcup/ghc/*/share/doc \
  && find ~/.ghcup/ghc -type f -name '*.a' -exec rm {} + \
  && find ~/.ghcup/ghc -type f -name '*.hi' -exec rm {} + \
  && find ~/.ghcup/ghc -type f -name '*-prof' -exec rm {} + \
  && ghcup gc
-RUN ghcup install hls 1.8.0 \
+RUN ghcup install hls ${HLS_VERSION} \
 # && rm -rf ~/.ghcup/hls/*/lib \
- && find ~/.ghcup/hls/*/bin -type f ! -name 'haskell-language-server-9.0.2' -exec rm {} + \
+ && find ~/.ghcup/hls/*/bin -type f ! -name 'haskell-language-server-${GHC_VERSION}' -exec rm {} + \
  && ghcup gc
 
 # Copy user code
@@ -53,4 +55,4 @@ COPY --chown=${UNAME} user_code/ ${UHOME}
 RUN mkdir -p ${UHOME}/output
 
 # Run
-CMD haskell-language-server-9.0.2 lsp
+CMD haskell-language-server-${GHC_VERSION} lsp
